@@ -1,11 +1,9 @@
-import { Button } from "@mui/material"
+import LostPets from "./LostPets";
 
-export default function TestComponent(){
-    return(
-        <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-        >Hello</Button>
-    )
+export default function TestComponent() {
+  return (
+    <>
+      <LostPets />
+    </>
+  );
 }
