@@ -6,6 +6,6 @@ export default function TestComponent() {
             type="submit"
             variant="contained"
             color="secondary"
-        >Hello</Button>
+        >Hi</Button>
     )
 }
