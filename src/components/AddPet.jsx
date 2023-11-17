@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
-
-import { useState } from "react";
+import {useForm} from "react-hook-form";
 
 import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -17,7 +16,10 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
 
-  width: 400,
+  display: "flex",
+  justifyContent: "center",
+
+  width: 500,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -28,47 +30,42 @@ const style = {
 export default function AddPet({onAddPet, toggleModal})
 {
 
-  const initialisePetDetails = () => {
-    return( { name: "", species: "", gender: ""});
-  }
+  const {register, handleSubmit} = useForm({mode: "onChange" });
 
-  const [petDetails, setPetDetails] = useState(initialisePetDetails);
-
-  const updateDetails = (eventObject) =>
-  {
-    const field = eventObject.target.name;
-    const value = eventObject.target.value;
-
-    setPetDetails( (oldDetails) => {
-      const newDetails = {...oldDetails};
-
-      newDetails[field] = value;
-
-      return newDetails;
-    });
-  }
-
-  const validatePetDetails = () => {
-    if((petDetails.name !== "") && (petDetails.species !== "") && ((petDetails.gender === "Male") || (petDetails.gender === "Female")))
-    {
-      return true;
+  const registerOptions = {
+    name: {required: "Name cannot be blank"},
+    species: {required: "Species cannot be blank"},
+    breed: {required: "Breed cannot be blank"},
+    gender: {required: "Select one Gender"},
+    age: {
+      required: "Age is required",
+      min: {
+        value: -1,
+        message: "Age must be atleast 0",
+      },
+      max: {
+        value: 100,
+        message: "Age must be less than 100",
+      }
+    },
+    weight: {
+      required: "Weight is required",
+      min: {
+        value: -1,
+        message: "Weight must be atleast 0",
+      },
+      max: {
+        value: 300,
+        message: "Weight must be less than 300",
+      }
     }
-    return false;
   }
 
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
+  const onFormSubmit = (data) => {
+    onAddPet(data);
 
-    if(validatePetDetails())
-    {
-      onAddPet(petDetails);
-
-      //reset pet details
-      setPetDetails(initialisePetDetails);
-
-      //closing modal
-      toggleModal();
-    }
+    //closing Modal
+    toggleModal();
   }
 
   return (
@@ -77,36 +74,52 @@ export default function AddPet({onAddPet, toggleModal})
 
         <Box
           component="form"
-          onSubmit={handleSubmit}
+          //handleSubmit validates inputs prior to submission of Form
+          onSubmit={handleSubmit(onFormSubmit)}
           sx={{
-            '& > :not(style)': { m: 1, width: '25ch' },
+            '& > :not(style)': { m: 1, width: '35ch' },
             border: 1,
             p: 3,
-            textAlign:'center'
+            textAlign: "center"
           }}
           noValidate
           autoComplete="off"
         >
 
           <TextField id="outlined-basic" label="Pet Name" variant="outlined"
-            name="name" value={petDetails.name} onChange={updateDetails}/>
+            name="name" {...register("name", registerOptions.name)}/>
 
           <br />
 
-          <TextField id="outlined-basic" label="Pet Type" variant="outlined"
-            name="species" value={petDetails.species} onChange={updateDetails}
+          <TextField id="outlined-basic" label="Species" variant="outlined"
+            name="species" {...register("species", registerOptions.species)}
+          />
+          <br />
+
+          <TextField id="outlined-basic" label="Breed" variant="outlined"
+            name="breed" {...register("breed", registerOptions.breed)}
           />
           <br />
 
           <RadioGroup
             row
             name="gender"
-            value={petDetails.gender}
-            onChange={updateDetails}
+            {...register("gender", registerOptions.gender)}
+            sx={{display: "flex", justifyContent: "center"}}
           >
-            <FormControlLabel value="Female" control={<Radio />} label="Female" />
             <FormControlLabel value="Male" control={<Radio />} label="Male" />
+            <FormControlLabel value="Female" control={<Radio />} label="Female" />
           </RadioGroup>
+
+          <TextField id="outlined-basic" label="Age" variant="outlined"
+            name="age" {...register("age", registerOptions.age)}
+          />
+          <br />
+
+          <TextField id="outlined-basic" label="Weight (kg)" variant="outlined"
+            name="weight" {...register("weight", registerOptions.weight)}
+          />
+          <br />
 
           <Button type="submit" variant="contained">Add</Button>
         </Box>

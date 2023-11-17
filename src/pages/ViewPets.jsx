@@ -32,11 +32,14 @@ export default function ViewPets() {
     <>
       <Grid container spacing={2} pt={5} >
 
+        <Grid item xs={2}>
+        </Grid>
+
         <Grid item xs={6} sx={{textAlign: "center"}}>
           <h1>Your Pets:</h1>
         </Grid>
 
-        <Grid item xs={6} sx={{textAlign: "center"}}>
+        <Grid item xs={4} sx={{textAlign: "center"}}>
           <br />
           <Button variant='contained' color="primary" size="large" startIcon={<AddCircleOutlineIcon />}
            onClick={toggleOpen}>

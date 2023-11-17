@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 
+
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -13,15 +14,17 @@ import Tooltip from '@mui/material/Tooltip';
 
 import Matcha from "../assets/myCat.jpg"
 
+import "./PetCard.css"
+
 export default function PetCard({pet})
 {
   return (
-    <Card sx={{ maxWidth: 350, margin: 5}}>
+    <Card sx={{minWidth:300, maxWidth: 450, margin: 5, padding: 2}}>
 
       <Grid container>
-        <Grid item xs={2}>
+        <Grid item xs={3}>
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={6}>
           <CardMedia
             component="img"
             alt="Matcha"
@@ -31,7 +34,7 @@ export default function PetCard({pet})
             }}
           />
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={3}>
           <Tooltip title="Edit">
             <Button size="large" as={Link} to="/">
               <EditIcon />
