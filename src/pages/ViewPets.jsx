@@ -2,14 +2,11 @@ import { useState } from 'react';
 
 import { Button } from '@mui/material';
 import Modal from '@mui/material/Modal';
+import Grid from '@mui/material/Grid';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 import PetList from '../components/PetList';
 import AddPet from '../components/AddPet';
-
-import Grid from '@mui/material/Grid';
-
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-
 
 function initialisePetsList()
 {
@@ -33,31 +30,30 @@ export default function ViewPets() {
 
   return (
     <>
-      <Grid container spacing={2} pt={5}>
-        <Grid item xs={8}>
+      <Grid container spacing={2} pt={5} >
+
+        <Grid item xs={6} sx={{textAlign: "center"}}>
           <h1>Your Pets:</h1>
         </Grid>
-        <Grid item xs={4}>
+
+        <Grid item xs={6} sx={{textAlign: "center"}}>
           <br />
-          <Button variant='contained' color="success" size="large" startIcon={<AddCircleOutlineIcon />}
+          <Button variant='contained' color="primary" size="large" startIcon={<AddCircleOutlineIcon />}
            onClick={toggleOpen}>
             Add Pet
           </Button>
         </Grid>
       </Grid>
 
-      <main>
+      <PetList pets={pets}/>
 
-        <PetList pets={pets}/>
-
-        <Modal
-          open={open}
-          onClose={toggleOpen}
-        >
-          <AddPet onAddPet={handleAddPet} toggleModal={toggleOpen}/>
-        </Modal>
-
-      </main>
+      <Modal
+        open={open}
+        onClose={toggleOpen}
+        style={{alignItems:'center',justifyContent:'center'}}
+      >
+        <AddPet onAddPet={handleAddPet} toggleModal={toggleOpen}/>
+      </Modal>
 
     </>
   );
