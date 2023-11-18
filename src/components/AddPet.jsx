@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 
 import {useForm} from "react-hook-form";
+import { useState } from "react";
 
 import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -60,14 +61,26 @@ export default function AddPet({onAddPet, toggleModal})
       }
     },
     vaccinated: {required: "Select one Status"},
+    image: {required: "Upload"}
   }
 
-  const onFormSubmit = (data) => {
+  const onFormSubmit = async (data) => {
     onAddPet(data);
 
     //closing Modal
     toggleModal();
   }
+
+
+
+  const handleImageUpload = (event) => {
+
+    registerOptions.image = URL.createObjectURL(event.target.files[0]);
+
+    console.log(registerOptions.image);
+  };
+
+
 
   return (
     <>
@@ -102,6 +115,26 @@ export default function AddPet({onAddPet, toggleModal})
           />
           <br />
 
+          <input
+            accept="image/*"
+            style={{ display: 'none' }}
+            id="contained-button-file"
+            type="file"
+            onChange={handleImageUpload}
+            name='PET PICTURE'
+          />
+
+          <label htmlFor="contained-button-file">
+            <Button
+              variant="contained"
+              component="span"
+            >
+              UPLOAD PICTURE
+            </Button>
+          </label>
+
+          <br />
+          <br />
 
           <FormLabel id="gender">Gender:</FormLabel>
           <RadioGroup

@@ -18,7 +18,7 @@ import "./PetCard.css"
 export default function PetCard({pet})
 {
   return (
-    <Card sx={{minWidth:300, marginTop: 10, marginX: 5, paddingX: 2, borderRadius: 10}}>
+    <Card sx={{minWidth:300, marginTop: 10, marginX: 5, paddingX: 2, borderRadius: 5, boxShadow:'0 4px 4px 0 rgba(0,0,0,0.4)'}}>
 
       <Grid container>
         <Grid item xs={2}>
@@ -32,7 +32,7 @@ export default function PetCard({pet})
             <CardMedia
               component="img"
               alt="Matcha"
-              src={Matcha}
+              src={pet.image ? pet.image : Matcha}
               sx={{ borderRadius: "50%"}}
               style={{
                 alignContent: "center",
