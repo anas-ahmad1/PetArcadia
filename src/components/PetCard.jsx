@@ -36,7 +36,7 @@ export default function PetCard({pet})
         </Grid>
         <Grid item xs={3}>
           <Tooltip title="Edit">
-            <Button size="large" as={Link} to="/">
+            <Button size="large" as={Link} to="/" sx={{mt: 5}}>
               <EditIcon />
             </Button>
           </Tooltip>

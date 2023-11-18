@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+
 import {useForm} from "react-hook-form";
 
 import { Button } from "@mui/material";
@@ -7,8 +8,6 @@ import TextField from '@mui/material/TextField';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-
-//import FormLabel from '@mui/material/FormLabel';
 
 const style = {
   position: 'absolute',
@@ -104,11 +103,10 @@ export default function AddPet({onAddPet, toggleModal})
           <RadioGroup
             row
             name="gender"
-            {...register("gender", registerOptions.gender)}
             sx={{display: "flex", justifyContent: "center"}}
           >
-            <FormControlLabel value="Male" control={<Radio />} label="Male" />
-            <FormControlLabel value="Female" control={<Radio />} label="Female" />
+            <FormControlLabel value="Male" control={<Radio />} {...register("gender", registerOptions.gender)} label="Male" />
+            <FormControlLabel value="Female" control={<Radio />} {...register("gender", registerOptions.gender)} label="Female" />
           </RadioGroup>
 
           <TextField id="outlined-basic" label="Age" variant="outlined"
@@ -121,7 +119,7 @@ export default function AddPet({onAddPet, toggleModal})
           />
           <br />
 
-          <Button type="submit" variant="contained">Add</Button>
+          <Button type="submit" variant="contained"><b style={{color:"white"}}>Add</b></Button>
         </Box>
       </Box>
     </>

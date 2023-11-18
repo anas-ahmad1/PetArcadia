@@ -8,11 +8,13 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import PetList from '../components/PetList';
 import AddPet from '../components/AddPet';
 
+import "./ViewPets.css"
+
 function initialisePetsList()
 {
   const myPets = [
-    { name: 'Matcha', species: 'Cat', gender: "Male", id: 1 },
-    { name: 'Cleo', species: 'Dog', gender: "Male", id: 2 },
+    { id: 1, name: 'Matcha', species: 'Cat', breed: "Calico", gender: "Male", age: 1, weight: 5},
+    { id: 2, name: 'Cleo', species: 'Dog', breed: "Golden Retriever", gender: "Male", age: 1, weight: 5 },
   ];
   return myPets;
 }
@@ -30,20 +32,21 @@ export default function ViewPets() {
 
   return (
     <>
-      <Grid container spacing={2} pt={5} >
+      <Grid container spacing={15} pt={5} >
 
-        <Grid item xs={2}>
-        </Grid>
-
-        <Grid item xs={6} sx={{textAlign: "center"}}>
-          <h1>Your Pets:</h1>
+        <Grid item xs={4}>
         </Grid>
 
         <Grid item xs={4} sx={{textAlign: "center"}}>
-          <br />
-          <Button variant='contained' color="primary" size="large" startIcon={<AddCircleOutlineIcon />}
-           onClick={toggleOpen}>
-            Add Pet
+          <b className='Heading'>YOUR PETS</b>
+        </Grid>
+
+        <Grid item xs={4} sx={{textAlign: "center"}}>
+          <Button variant='contained' color="primary" size="large" style={{ fontSize: "1.5rem", borderRadius: "10px"}}
+            startIcon={<AddCircleOutlineIcon style={{fontSize: "2rem", color: 'white' }} />}
+            onClick={toggleOpen}
+          >
+            <b className='buttonTextWhite'>Add Pet</b>
           </Button>
         </Grid>
       </Grid>

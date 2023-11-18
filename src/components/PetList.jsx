@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-key */
 /* eslint-disable react/prop-types */
 
 import PetCard from "./PetCard";
@@ -11,7 +10,7 @@ export default function PetList({pets}) {
       {
         pets.map((pet) => {
           return(
-            <PetCard pet={pet} />
+            <PetCard key={pet.id} pet={pet} />
           )
         })
       }
