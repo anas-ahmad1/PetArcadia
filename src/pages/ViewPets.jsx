@@ -13,8 +13,8 @@ import "./ViewPets.css"
 function initialisePetsList()
 {
   const myPets = [
-    { id: 1, name: 'Matcha', species: 'Cat', breed: "Calico", gender: "Male", age: 1, weight: 5},
-    { id: 2, name: 'Cleo', species: 'Dog', breed: "Golden Retriever", gender: "Male", age: 1, weight: 5 },
+    { id: 1, name: 'Matcha', species: 'Cat', breed: "Calico", gender: "Male", age: 1, weight: 5, vaccinated: "Partial"},
+    { id: 2, name: 'Cleo', species: 'Dog', breed: "Golden Retriever", gender: "Male", age: 1, weight: 5, vaccinated: "Complete" },
   ];
   return myPets;
 }
@@ -31,7 +31,7 @@ export default function ViewPets() {
   const toggleOpen = () => setOpen(!open);
 
   return (
-    <>
+    <div className='Wrapper'>
       <Grid container spacing={15} pt={5} >
 
         <Grid item xs={4}>
@@ -61,6 +61,6 @@ export default function ViewPets() {
         <AddPet onAddPet={handleAddPet} toggleModal={toggleOpen}/>
       </Modal>
 
-    </>
+    </div>
   );
 }

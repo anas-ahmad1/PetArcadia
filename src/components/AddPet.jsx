@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from "@mui/material/FormLabel";
 
 const style = {
   position: 'absolute',
@@ -57,7 +58,8 @@ export default function AddPet({onAddPet, toggleModal})
         value: 300,
         message: "Weight must be less than 300",
       }
-    }
+    },
+    vaccinated: {required: "Select one Status"},
   }
 
   const onFormSubmit = (data) => {
@@ -76,7 +78,7 @@ export default function AddPet({onAddPet, toggleModal})
           //handleSubmit validates inputs prior to submission of Form
           onSubmit={handleSubmit(onFormSubmit)}
           sx={{
-            '& > :not(style)': { m: 1, width: '35ch' },
+            '& > :not(style)': { m: 1, width: '50ch' },
             border: 1,
             p: 3,
             textAlign: "center"
@@ -100,8 +102,11 @@ export default function AddPet({onAddPet, toggleModal})
           />
           <br />
 
+
+          <FormLabel id="gender">Gender:</FormLabel>
           <RadioGroup
             row
+            aria-labelledby="gender"
             name="gender"
             sx={{display: "flex", justifyContent: "center"}}
           >
@@ -118,6 +123,18 @@ export default function AddPet({onAddPet, toggleModal})
             name="weight" {...register("weight", registerOptions.weight)}
           />
           <br />
+
+          <FormLabel id="vaccination-status">Vaccination Status:</FormLabel>
+          <RadioGroup
+            row
+            aria-labelledby="vaccination-status"
+            name="vaccinated"
+            sx={{display: "flex", justifyContent: "center"}}
+          >
+            <FormControlLabel value="Complete" control={<Radio />} {...register("vaccinated", registerOptions.vaccinated)} label="Complete" />
+            <FormControlLabel value="Partial" control={<Radio />} {...register("vaccinated", registerOptions.vaccinated)} label="Partial" />
+            <FormControlLabel value="Unvaccinated" control={<Radio />} {...register("vaccinated", registerOptions.vaccinated)} label="Unvaccinated" />
+          </RadioGroup>
 
           <Button type="submit" variant="contained"><b style={{color:"white"}}>Add</b></Button>
         </Box>
