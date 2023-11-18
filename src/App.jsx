@@ -1,9 +1,9 @@
-import TestComponent from './components/TestComponent'
+import UserSignup from './components/UserSignup'
 
 function App() {
   return (
     <>
-      <TestComponent />
+      <UserSignup />
     </>
   )
 }

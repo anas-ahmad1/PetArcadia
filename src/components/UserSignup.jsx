@@ -29,7 +29,7 @@ import 'react-toastify/dist/ReactToastify.css';
 //   },
 // });
 
-export default function TestComponent() {
+export default function UserSignup() {
   const theme = useTheme();
   const primaryColor = theme.palette.primary.main;
   const secondaryColor = theme.palette.secondary.main;
