@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 
 import {useForm} from "react-hook-form";
+
 import { useState } from "react";
 
 import { Button } from "@mui/material";
@@ -64,23 +65,22 @@ export default function AddPet({onAddPet, toggleModal})
     image: {required: "Upload"}
   }
 
+  //a separate piece of state to handle image uploads
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedImage(URL.createObjectURL(file));
+  };
+
   const onFormSubmit = async (data) => {
+    data.image = selectedImage;
+
     onAddPet(data);
 
     //closing Modal
     toggleModal();
   }
-
-
-
-  const handleImageUpload = (event) => {
-
-    registerOptions.image = URL.createObjectURL(event.target.files[0]);
-
-    console.log(registerOptions.image);
-  };
-
-
 
   return (
     <>
@@ -114,27 +114,33 @@ export default function AddPet({onAddPet, toggleModal})
             name="breed" {...register("breed", registerOptions.breed)}
           />
           <br />
+          <br />
 
           <input
-            accept="image/*"
-            style={{ display: 'none' }}
-            id="contained-button-file"
-            type="file"
-            onChange={handleImageUpload}
-            name='PET PICTURE'
+              accept="image/*"
+              style={{ display: 'none' }}
+              id="image-upload"
+              type="file"
+              ref={register}
+              {...register("image", registerOptions.image)}
+              onChange={handleImageChange}
           />
-
-          <label htmlFor="contained-button-file">
-            <Button
-              variant="contained"
-              component="span"
-            >
-              UPLOAD PICTURE
-            </Button>
+          <label htmlFor="image-upload">
+              <Button
+                  variant="contained"
+                  color="primary"
+                  component="span"
+              >
+                  Upload Image
+              </Button>
           </label>
 
-          <br />
-          <br />
+          {/* this way the selectedImage is only displayed if it exists */}
+          <p>
+            {selectedImage && (
+              <img src={selectedImage} alt="Uploaded" width="200" height="200" />
+            )}
+          </p>
 
           <FormLabel id="gender">Gender:</FormLabel>
           <RadioGroup
