@@ -1,9 +1,10 @@
-import TestComponent from './components/TestComponent'
+import UserProfile from './components/UserProfile'
+import CheckPic from './components/CheckPic'
 
 function App() {
   return (
     <>
-      <TestComponent />
+      <UserProfile />
     </>
   )
 }
