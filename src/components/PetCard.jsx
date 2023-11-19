@@ -17,13 +17,6 @@ import "./PetCard.css"
 
 export default function PetCard({pet})
 {
-  function getURL()
-  {
-    if (pet.image) {
-      return URL.createObjectURL(pet.image);
-    }
-    return Matcha;
-  }
 
   return (
     <Card sx={{minWidth:300, marginTop: 10, marginX: 5, paddingX: 2, borderRadius: 5, boxShadow:'0 4px 4px 0 rgba(0,0,0,0.4)'}}>

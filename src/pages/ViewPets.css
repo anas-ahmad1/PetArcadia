@@ -6,10 +6,18 @@
 .Wrapper
 {
   background-color: #EFF3F8;
-  height: 100vh;
+  height: 110vh;
 }
 
 .buttonTextWhite
 {
   color: whitesmoke;
+}
+
+.vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
 }

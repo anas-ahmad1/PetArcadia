@@ -7,6 +7,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 import PetList from '../components/PetList';
 import AddPet from '../components/AddPet';
+import SideBar from '../components/SideBar';
 
 import "./ViewPets.css"
 
@@ -31,7 +32,7 @@ export default function ViewPets() {
   const toggleOpen = () => setOpen(!open);
 
   return (
-    <div className='Wrapper'>
+    <main className='Wrapper'>
       <Grid container spacing={15} pt={5} >
 
         <Grid item xs={4}>
@@ -51,16 +52,27 @@ export default function ViewPets() {
         </Grid>
       </Grid>
 
-      <PetList pets={pets}/>
+      <Grid container pt={5} >
+        <Grid item xs={1} container>
+          <div className='vertical-center'>
+            <SideBar />
+          </div>
+        </Grid>
+        <Grid item xs={11}>
+          <PetList pets={pets}/>
+        </Grid>
+      </Grid>
+
+
 
       <Modal
         open={open}
         onClose={toggleOpen}
-        style={{alignItems:'center',justifyContent:'center'}}
+        style={{alignItems:'center', justifyContent:'center'}}
       >
         <AddPet onAddPet={handleAddPet} toggleModal={toggleOpen}/>
       </Modal>
 
-    </div>
+    </main>
   );
 }

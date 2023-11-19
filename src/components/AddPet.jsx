@@ -12,6 +12,11 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from "@mui/material/FormLabel";
 
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -23,9 +28,9 @@ const style = {
 
   width: 500,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  borderRadius: "10%",
   boxShadow: 24,
-  p: 4
+  p: 1
 };
 
 
@@ -36,8 +41,8 @@ export default function AddPet({onAddPet, toggleModal})
 
   const registerOptions = {
     name: {required: "Name cannot be blank"},
-    species: {required: "Species cannot be blank"},
-    breed: {required: "Breed cannot be blank"},
+    species: {required: "Select one species"},
+    breed: {},
     gender: {required: "Select one Gender"},
     age: {
       required: "Age is required",
@@ -92,7 +97,6 @@ export default function AddPet({onAddPet, toggleModal})
           onSubmit={handleSubmit(onFormSubmit)}
           sx={{
             '& > :not(style)': { m: 1, width: '50ch' },
-            border: 1,
             p: 3,
             textAlign: "center"
           }}
@@ -104,10 +108,24 @@ export default function AddPet({onAddPet, toggleModal})
             name="name" {...register("name", registerOptions.name)}/>
 
           <br />
-
-          <TextField id="outlined-basic" label="Species" variant="outlined"
-            name="species" {...register("species", registerOptions.species)}
-          />
+          <FormControl fullWidth>
+            <InputLabel id="species-label">Species:</InputLabel>
+            <Select
+              labelId="species-label"
+              id="species"
+              label="Species:"
+              {...register("species", registerOptions.species)}
+            >
+              <MenuItem value={"Cat"}>Cat</MenuItem>
+              <MenuItem value={"Dog"}>Dog</MenuItem>
+              <MenuItem value={"Rabbit"}>Rabbit</MenuItem>
+              <MenuItem value={"Rabbit"}>Hamster</MenuItem>
+              <MenuItem value={"Monkey"}>Monkey</MenuItem>
+              <MenuItem value={"Parrot"}>Parrot</MenuItem>
+              <MenuItem value={"Chicken"}>Chicken</MenuItem>
+              <MenuItem value={"Other"}>Other</MenuItem>
+            </Select>
+          </FormControl>
           <br />
 
           <TextField id="outlined-basic" label="Breed" variant="outlined"
@@ -131,18 +149,15 @@ export default function AddPet({onAddPet, toggleModal})
                   color="primary"
                   component="span"
               >
-                  Upload Image
+                <b style={{color: "white"}}>Upload Image</b>
               </Button>
           </label>
 
-          {/* this way the selectedImage is only displayed if it exists */}
-          <p>
-            {selectedImage && (
-              <img src={selectedImage} alt="Uploaded" width="200" height="200" />
-            )}
+          <p>{selectedImage &&
+            <img src={selectedImage} height={100} width={100} />}
           </p>
 
-          <FormLabel id="gender">Gender:</FormLabel>
+          <FormLabel sx={{mb: 0}} id="gender">Gender:</FormLabel>
           <RadioGroup
             row
             aria-labelledby="gender"
@@ -161,6 +176,7 @@ export default function AddPet({onAddPet, toggleModal})
           <TextField id="outlined-basic" label="Weight (kg)" variant="outlined"
             name="weight" {...register("weight", registerOptions.weight)}
           />
+          <br />
           <br />
 
           <FormLabel id="vaccination-status">Vaccination Status:</FormLabel>
