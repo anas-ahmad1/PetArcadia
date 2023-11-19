@@ -73,7 +73,7 @@ const pets = [
   },
 ];
 
-export default function LostPets() {
+export default function FoundPets() {
   const theme = useTheme();
   document.body.style = `background: ${theme.palette.background.paper};`;
 
@@ -109,7 +109,7 @@ export default function LostPets() {
             }}
             sx={{
               mr: { md: 3 }, // Right margin for medium screens and above
-              // width: 300,
+              width: 300,
             }}
           />
         </Box>
@@ -122,7 +122,7 @@ export default function LostPets() {
           fontSize={{ xs: 50, xs1: 60, xs2: 70, md: 80 }}
           sx={{ pt: 4, pb: 8, fontWeight: 600, color: "#47494F" }}
         >
-          LOST PETS
+          FOUND PETS
         </Typography>
 
         <Box sx={{ flexGrow: 1 }}>

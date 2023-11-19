@@ -1,10 +1,12 @@
-import TestComponent from './components/TestComponent'
+import FoundPets from "./components/FoundPets";
+import LostPets from "./components/LostPets";
 
 function App() {
   return (
     <>
-      <TestComponent />
+      <LostPets />
+      {/* <FoundPets /> */}
     </>
-  )
+  );
 }
-export default App
+export default App;
