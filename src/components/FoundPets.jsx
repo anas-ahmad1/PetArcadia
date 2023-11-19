@@ -75,7 +75,6 @@ const pets = [
 
 export default function FoundPets() {
   const theme = useTheme();
-  document.body.style = `background: ${theme.palette.background.paper};`;
 
   return (
     <>
