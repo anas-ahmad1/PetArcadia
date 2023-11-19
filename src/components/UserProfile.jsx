@@ -13,12 +13,12 @@ import Avatar from "@mui/material/Avatar";
 import Input from "@mui/material/Input";
 import { useForm } from "react-hook-form";
 import FormControl from "@mui/material/FormControl";
+import EmailTwoToneIcon from "@mui/icons-material/EmailTwoTone";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function UserProfile() {
   const theme = useTheme();
-  const handleChange = (event) => {
-    setGender(event.target.value);
-  };
 
   const {
     register,
@@ -30,45 +30,61 @@ export default function UserProfile() {
     console.log("form submitted");
   };
 
+  const notify = (errorMsg) => {
+    toast.error(errorMsg, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
   const handleError = (errors) => {};
 
   const registerOptions = {
-    name: { required: "Name can not be left blank" },
-    gender: { required: "Gender can not be left blank" },
-    contact: {
-      required: "Contact can not be left blank",
-      maxlength: {
-        value: 11,
-        message: "Contact can not be more than 11 characters",
-      },
-    },
+    // name: { required: "Name can not be left blank" },
+    // contact: {
+    //   required: "Contact can not be left blank",
+    //   maxlength: {
+    //     value: 11,
+    //     message: "Contact can not be more than 11 characters",
+    //   },
+    // },
     oldpassword: {
       required: "Old Password is required",
-      minLength: {
-        value: 10,
-        message: "Old Password can not be less than 10 characters",
-      },
+    //   minLength: {
+    //     value: 10,
+    //     message: "Old Password can not be less than 10 characters",
+    //   },
     },
-    password: {
-      required: "Password is required",
-      minLength: {
-        value: 10,
-        message: "Password can not be less than 10 characters",
-      },
-    },
-    confirmpassword: {
-      required: "Password is required",
-      minLength: {
-        value: 10,
-        message: "Password can not be less than 10 characters",
-      },
-    },
+    // newpassword: {
+    //   required: "Password is required",
+    //   minLength: {
+    //     value: 10,
+    //     message: "Password can not be less than 10 characters",
+    //   },
+    // },
+    // confirmpassword: {
+    //   required: "Password is required",
+    //   minLength: {
+    //     value: 10,
+    //     message: "Password can not be less than 10 characters",
+    //   },
+    // },
   };
+
+  
 
   return (
     <>
       <CustomLogo color={theme.palette.primary.main} />
       <form onSubmit={handleSubmit(handleRegistration, handleError)}>
+      {errors?.oldpassword && notify(errors.oldpassword.message)}
+      {errors?.newpassword && notify(errors.newpassword.message)}
         <Box
           sx={{
             display: "flex",
@@ -174,12 +190,12 @@ export default function UserProfile() {
                       }}
                     >
                       <Button
-                        type="submit"
+                        type="button"
                         variant="contained"
                         color="primary"
-                        sx={{ width: "50%" }}
+                        sx={{ width: "30%" }}
                       >
-                        Submit
+                        Save
                       </Button>
                     </Grid>
                   </Paper>
@@ -188,32 +204,6 @@ export default function UserProfile() {
 
               <Grid container item xs={6} alignContent="baseline">
                 <Grid container item xs={12} alignContent="baseline">
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      "& > :not(style)": {
-                        ml: 5,
-                        mr: 5,
-                        mt: 4,
-                        width: "30vw",
-                        height: "15vh",
-                      },
-                    }}
-                  >
-                    <Paper>
-                      <Grid
-                        item
-                        xs={12}
-                        sx={{ display: "flex", justifyContent: "center" }}
-                      >
-                        <Typography variant="h5" fontSize={"1.5rem"}>
-                          anasahmadleo@gmail.com
-                        </Typography>
-                      </Grid>
-                    </Paper>
-                  </Box>
-                  <Grid container item xs={12} alignContent="baseline">
                     <Box
                       sx={{
                         display: "flex",
@@ -221,20 +211,133 @@ export default function UserProfile() {
                         "& > :not(style)": {
                           ml: 5,
                           mr: 5,
-                          mt: 5,
+                          mt: 4,
                           width: "30vw",
-                          height: "35vh",
+                          height: "60vh",
                         },
                       }}
                     >
-                      <Paper></Paper>
+                      <Paper>
+                      <Grid container item xs={12} alignContent="baseline">
+                        <Grid
+                          item
+                          xs={2}
+                          sx={{ display: "flex", justifyContent: "center", mt: 2 }}
+                        >
+                          <EmailTwoToneIcon color="primary"></EmailTwoToneIcon>
+                        </Grid>
+                        <Grid
+                          item
+                          xs={10}
+                          sx={{
+                            display: "flex",
+                            justifyContent: "start",
+                            mt: 2,
+                          }}
+                        >
+                          <Typography variant="h5" fontSize={"1rem"}>
+                            anasahmadleo@gmail.com
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                      <hr style={{height:"3px",border:"none", backgroundColor:theme.palette.primary.light}}/>
+                        <Grid
+                          item
+                          xs={12}
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            mt: "20px",
+                          }}
+                        >
+                          <Typography variant="h1" fontSize={"1rem"}>
+                            Reset Password
+                          </Typography>
+                        </Grid>
+                        <Grid
+                          item
+                          xs={12}
+                          sx={{ display: "flex", justifyContent: "center" }}
+                        >
+                          <TextField
+                            id="oldpassword"
+                            label="Old Password"
+                            variant="outlined"
+                            style={{
+                              marginTop: "20px",
+                            }}
+                            {...register(
+                              "oldpassword",
+                              registerOptions.oldpassword
+                            )}
+                          />
+                        </Grid>
+                        
+                        <Grid
+                          item
+                          xs={12}
+                          sx={{ display: "flex", justifyContent: "center" }}
+                        >
+                          <TextField
+                            id="new-password"
+                            label="New Password"
+                            variant="outlined"
+                            style={{
+                              marginTop: "20px",
+                            }}
+                            {...register(
+                              "newpassword",
+                              registerOptions.newpassword
+                            )}
+                          />
+                        </Grid>
+                        <Grid
+                          item
+                          xs={12}
+                          sx={{ display: "flex", justifyContent: "center" }}
+                        >
+                          <TextField
+                            id="confirm-password"
+                            label="Confirm Password"
+                            variant="outlined"
+                            style={{
+                              marginTop: "20px",
+                            }}
+                            {...register(
+                              "confirmpassword",
+                              registerOptions.confirmpassword
+                            )}
+                          />
+                        </Grid>
+                        <Grid
+                          item
+                          xs={12}
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            marginBottom: "20px",
+                          }}
+                        >
+                          <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            style={{
+                                marginTop: "20px",
+                              }}
+                              sx={{ width: "30%" }}
+                          >
+                            RESET
+                          </Button>
+                        </Grid>
+                      </Paper>
                     </Box>
-                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
           </Paper>
         </Box>
+        <ToastContainer />
       </form>
     </>
   );
