@@ -66,6 +66,19 @@ const theme = createTheme({
       },
     },
   },
+  breakpoints: {
+    values: {
+      xs: 0,
+      xs1: 400,
+      xs2: 500,
+      sm: 600,
+      md: 900,
+      md1: 1000,
+      md2: 1114,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
 });
 
 ReactDOM.createRoot(document.getElementById("root")).render(
