@@ -1,10 +1,10 @@
-import TestComponent from './components/TestComponent'
+import PetProfile from "./components/PetProfile";
 
 function App() {
   return (
     <>
-      <TestComponent />
+      <PetProfile />
     </>
-  )
+  );
 }
-export default App
+export default App;
