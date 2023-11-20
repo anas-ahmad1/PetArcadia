@@ -20,6 +20,8 @@ import Avatar from '@mui/material/Avatar';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import Blogcard from './BlogCard';
+import Pagination from '@mui/material/Pagination';
+import PaginationItem from '@mui/material/PaginationItem';
 
 export default function Blogs() {
 
@@ -31,7 +33,7 @@ export default function Blogs() {
             <Box sx={{
                 display: 'flex', height: '500px', justifyContent: 'center', alignItems: 'center', backgroundSize: 'cover',
                 position: 'relative', backgroundRepeat: 'no-repeat', backgroundImage: 'linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)),url( "src/assets/BlogCover.jpg")',
-                marginTop: '50px'
+                marginTop: '50px', backgroundAttachment: 'fixed'
             }}>
                 <Typography variant='h3' sx={{ color: 'white', marginBottom: '140px' }}>PET BLOGS</Typography>
             </Box>
@@ -41,9 +43,36 @@ export default function Blogs() {
             </Container>
             {/*Grid Layout used to represent cards of Blogs */}
             <Grid container spacing={3}>
-                <Blogcard />
+
+                <Blogcard cardText="Fun Place that you can visit with your pets..... "
+                    authorName="Mark"
+                    Title="Fun Pet Places"
+                    cardmedia="src/assets/cardimage.jpg"
+                    userimage="src/assets/user4.jpg"
+                />
+                <Blogcard cardText="Your Pet Health matters..... "
+                    authorName="David"
+                    Title="Pet Health Care"
+                    cardmedia="src/assets/c2.jpg"
+                    userimage="src/assets/user3.jpg"
+                />
+                <Blogcard cardText="Prefer using these brands food..... "
+                    authorName="John"
+                    Title="Awsome Pet Food!"
+                    cardmedia="src/assets/c1.jpg"
+                    userimage="src/assets/user2.jpg"
+                />
+                <Blogcard cardText="Pet Toys Shop that..... "
+                    authorName="Emma"
+                    Title="What to buy to Welcome your new pet home?"
+                    cardmedia="src/assets/c3.jpg"
+                    userimage="src/assets/user1.jpg"
+                />
 
             </Grid>
+            <Box my={4}>
+                <Pagination count={10} sx={{ display: 'flex', justifyContent: "center" }} />
+            </Box>
         </>
     )
 
