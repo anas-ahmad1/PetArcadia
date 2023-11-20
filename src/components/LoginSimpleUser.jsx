@@ -210,12 +210,14 @@ export default function LoginSimpleUser() {
               />
             </Grid>
 
+            <Grid container item sx={{display:"flex", justifyContent:"center"}}>
+            <Grid container item width={"300px"}>
             <Grid
               item
               xs={12}
               sx={{
                 display: "flex",
-                justifyContent: "center",
+                justifyContent: "end",
                 marginBottom: "40px",
                 //marginRight: isLargeScreen ? "160px" : 0,
               }}
@@ -227,6 +229,8 @@ export default function LoginSimpleUser() {
               >
                 Forgot Password?
               </Link>
+            </Grid>
+            </Grid>
             </Grid>
 
             <Grid
