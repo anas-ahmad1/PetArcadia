@@ -1,19 +1,19 @@
 import { Link, Typography, useTheme } from "@mui/material";
 import CustomLogo from "../assets/CustomLogo";
-import VetSignupSvg from "../assets/VetSignupSvg"
+import VetSignupSvg from "../assets/VetSignupSvg";
 import { useForm } from "react-hook-form";
 import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
 import Grid from "@mui/material/Grid";
-import * as React from 'react';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import Button from '@mui/material/Button';
+import * as React from "react";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import Button from "@mui/material/Button";
 import { createTheme, ThemeProvider } from "@mui/material";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useMediaQuery } from "@mui/material";
 
 // const customTheme = createTheme({
 //   components: {
@@ -31,11 +31,12 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function UserSignup() {
   const theme = useTheme();
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up("md2"));
   const primaryColor = theme.palette.primary.main;
   const secondaryColor = theme.palette.secondary.main;
   const paperColor = theme.palette.background.paper;
   const defColor = theme.palette.background.default;
-  const [gender, setGender] = React.useState('');
+  const [gender, setGender] = React.useState("");
 
   const handleChange = (event) => {
     setGender(event.target.value);
@@ -61,8 +62,8 @@ export default function UserSignup() {
       draggable: true,
       progress: undefined,
       theme: "light",
-      });
-  }
+    });
+  };
 
   const handleError = (errors) => {};
 
@@ -89,158 +90,258 @@ export default function UserSignup() {
       minLength: {
         value: 10,
         message: "Password can not be less than 10 characters",
-      }
-    }
+      },
+    },
   };
 
   document.body.style = `background: ${defColor};`;
 
   return (
     <form onSubmit={handleSubmit(handleRegistration, handleError)}>
-    <Grid container spacing={2}>
-      <Grid container item xs={9} alignContent="baseline">
-        
-        <Grid container item xs={12}>
+      <Grid container spacing={2}>
+        <Grid container item xs={isLargeScreen ? 9 : 12} alignContent="baseline">
+          <Grid container item xs={12}>
+            <Grid
+              item
+              xs={12}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "60px",
+                marginBottom: "30px",
+              }}
+            >
+              <CustomLogo color={primaryColor} />
+            </Grid>
 
-          <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", marginTop: "60px",marginBottom: "30px" }}>
-            <CustomLogo color={primaryColor} />
-          </Grid>
-          
-          <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", marginBottom: "30px" }}>
-            <Typography variant="h1">SIGNUP</Typography>
-          </Grid> 
+            <Grid
+              item
+              xs={12}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                marginBottom: "30px",
+              }}
+            >
+              <Typography variant="h1">SIGNUP</Typography>
+            </Grid>
 
-          {errors?.name && notify(errors.name.message)}
-          {/* {errors?.email && notify(errors.email.message)}
+            {errors?.name && notify(errors.name.message)}
+            {/* {errors?.email && notify(errors.email.message)}
           {errors?.contact && notify(errors.contact.message)}
           {errors?.gender && notify(errors.gender.message)}
           {errors?.password && notify(errors.password.message)}
           {errors?.confirmpassword && notify(errors.confirmpassword.message)} */}
 
-            
-          <Grid item xs={12} md={6} zeroMinWidth sx={{ display: "flex", justifyContent: "end"}}>
-            <TextField
-              id="name"
-              label="Name"
-              variant="outlined"
-              style={{
-                marginRight: "20px", 
-                marginBottom:"30px",
-              }}
-              {...register("name", registerOptions.name)}
-            />
-          </Grid>
+            <Grid
+              item
+              xs={12}
+              md2={6}
+              zeroMinWidth
+              sx={{ display: "flex", justifyContent: "center" }}
+            >
+              <TextField
+                id="name"
+                label="Name"
+                variant="outlined"
+                style={{
+                  marginLeft: isLargeScreen ? "100px" : 0,
+                  marginBottom: "30px",
+                }}
+                {...register("name", registerOptions.name)}
+              />
+            </Grid>
 
-          <Grid item xs={12} md={6} zeroMinWidth sx={{ display: "flex", justifyContent: "start" }}>
-            <TextField
-              id="email"
-              label="Email address"
-              variant="outlined"
-              style={{
-                marginLeft: "20px", 
-                marginBottom:"30px",
-              }}
-              {...register("email", registerOptions.email)}
-            />
-          </Grid>
+            <Grid
+              item
+              xs={12}
+              md2={6}
+              zeroMinWidth
+              sx={{ display: "flex", justifyContent: "center" }}
+            >
+              <TextField
+                id="email"
+                label="Email address"
+                variant="outlined"
+                style={{
+                  marginRight: isLargeScreen ? "100px" : 0,
+                  marginBottom: "30px",
+                }}
+                {...register("email", registerOptions.email)}
+              />
+            </Grid>
 
-          <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "end" }}>
-          <TextField
-            id="contact"
-            label="Contact"
-            variant="outlined"
-            style={{
-              marginRight: "20px", 
-              marginBottom:"30px"
-            }}
-            {...register("contact", registerOptions.contact)}
-          />
-          </Grid>
+            <Grid
+              item
+              xs={12}
+              md2={6}
+              sx={{ display: "flex", justifyContent: "center" }}
+            >
+              <TextField
+                id="contact"
+                label="Contact"
+                variant="outlined"
+                style={{
+                  marginLeft: isLargeScreen ? "100px" : 0,
+                  marginBottom: "30px",
+                }}
+                {...register("contact", registerOptions.contact)}
+              />
+            </Grid>
 
-          <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "start" }}>
-            <FormControl style={{
-              marginLeft: "20px", 
-              marginBottom:"30px"
-            }}>
-              <InputLabel id="gender">Gender</InputLabel>
-              <Select
-                labelId="gender"
-                id="gender"
-                value={gender}
-                label="Gender"
-                onChange={handleChange}
-                {...register("gender", registerOptions.gender)}
+            <Grid
+              item
+              xs={12}
+              md2={6}
+              sx={{ display: "flex", justifyContent: "center" }}
+            >
+              <FormControl
+                style={{
+                  marginRight: isLargeScreen ? "100px" : 0,
+                  marginBottom: "30px",
+                }}
               >
-                <MenuItem value={"Male"}>Male</MenuItem>
-                <MenuItem value={"Female"}>Female</MenuItem>
-                <MenuItem value={"Others"}>Others</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
+                <InputLabel id="gender">Gender</InputLabel>
+                <Select
+                  labelId="gender"
+                  id="gender"
+                  value={gender}
+                  label="Gender"
+                  onChange={handleChange}
+                  {...register("gender", registerOptions.gender)}
+                >
+                  <MenuItem value={"Male"}>Male</MenuItem>
+                  <MenuItem value={"Female"}>Female</MenuItem>
+                  <MenuItem value={"Others"}>Others</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
 
-          <Grid item xs={12} md={6} sx={{ display: "flex", justifyContent: "end" }}>
-            <TextField
-              id="password"
-              label="Password"
-              type="password"
-              variant="outlined"
-              style={{
-                marginRight: "20px", 
-                marginBottom:"30px",
+            <Grid
+              item
+              xs={12}
+              md2={6}
+              sx={{ display: "flex", justifyContent: "center" }}
+            >
+              <TextField
+                id="password"
+                label="Password"
+                type="password"
+                variant="outlined"
+                style={{
+                  marginLeft: isLargeScreen ? "100px" : 0,
+                  marginBottom: "30px",
+                }}
+                {...register("password", registerOptions.password)}
+              />
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              md2={6}
+              zeroMinWidth
+              sx={{ display: "flex", justifyContent: "center" }}
+            >
+              <TextField
+                id="confirm-password"
+                label="Confirm Password"
+                variant="outlined"
+                type="password"
+                style={{
+                  marginRight: isLargeScreen ? "100px" : 0,
+                  marginBottom: "30px",
+                }}
+                {...register(
+                  "confirm-password",
+                  registerOptions.confirmpassword
+                )}
+              />
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                marginBottom: "20px",
               }}
-              {...register("password", registerOptions.password)}
-            />
-          </Grid>
+            >
+              <Button type="submit" variant="contained" color="primary">
+                SIGNUP
+              </Button>
+            </Grid>
 
-          <Grid item xs={12} md={6} zeroMinWidth sx={{ display: "flex", justifyContent: "start" }}>
-            <TextField
-              id="confirm-password"
-              label="Confirm Password"
-              variant="outlined"
-              type="password"
-              style={{
-                marginLeft: "20px", 
-                marginBottom:"30px",
+            <Grid
+              item
+              xs={12}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                marginBottom: "40px",
               }}
-              {...register("confirm-password", registerOptions.confirmpassword)}
-            />
-          </Grid>
+            >
+              <Typography variant="h5">Already have an Account? </Typography>
+              <Link
+                fontFamily={"Quicksand"}
+                marginTop="-1.5px"
+                marginLeft="3px"
+                fontSize={"0.8rem"}
+              >
+                Login
+              </Link>
+            </Grid>
 
-          <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
-          <Button type="submit" variant="contained" color="primary">
-            SIGNUP
-          </Button>
+            <Grid
+              item
+              xs={12}
+              sx={{ display: "flex", justifyContent: "center" }}
+            >
+              <Typography variant="h1" color={"#01564D"}>
+                Login as Simple User
+              </Typography>
+            </Grid>
           </Grid>
+        </Grid>
 
-          <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", marginBottom:"40px" }}>
-          <Typography variant="h5">Already have an Account? </Typography>
-          <Link fontFamily={"Quicksand"} marginTop="-1.5px" marginLeft="3px" fontSize={"0.8rem"}>Login</Link>
+        {isLargeScreen && (
+        <Grid
+          container
+          item
+          xs={3}
+          style={{
+            backgroundColor: theme.palette.primary.light,
+            minHeight: "100vh",
+            paddingLeft: 0,
+          }}
+        >
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              variant="h1"
+              fontFamily={"Quicksand"}
+              fontSize={"2.5rem"}
+              color={"#01564D"}
+            >
+              Welcome to PetArcadia
+            </Typography>
           </Grid>
 
           <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
-          <Typography variant="h1" color={"#01564D"}>Login as Simple User</Typography>
+            <VetSignupSvg />
           </Grid>
-
-          </Grid>
-      </Grid>
-
-
-      <Grid container item xs={3} 
-      style={{backgroundColor: theme.palette.primary.light, minHeight: '100vh',paddingLeft:0}}>
-
-      <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems:"center" }}>
-        <Typography variant="h1" fontFamily={"Quicksand"} fontSize={"2.5rem"} color={"#01564D"}>Welcome to PetArcadia</Typography>
-      </Grid>
-
-
-      <Grid item xs={12} sx={{ display: "flex", justifyContent: "center"}}>
-        <VetSignupSvg />
         </Grid>
-
+        )}
       </Grid>
-      
-    </Grid>
-    <ToastContainer/>
-    </form>    
+      <ToastContainer />
+    </form>
   );
 }
