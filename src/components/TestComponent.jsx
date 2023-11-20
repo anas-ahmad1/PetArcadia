@@ -1,11 +1,8 @@
 import { Button } from "@mui/material"
+import Blogs from "./Blog"
 
-export default function TestComponent(){
-    return(
-        <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-        >Hello</Button>
+export default function TestComponent() {
+    return (
+        <Blogs />
     )
 }
