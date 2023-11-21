@@ -13,7 +13,7 @@ import Box from '@mui/material/Box';
 
 import Matcha from "../assets/myCat.jpg"
 
-import "./PetCard.css"
+import "./ViewPetCard.css"
 
 export default function PetCard({pet})
 {
