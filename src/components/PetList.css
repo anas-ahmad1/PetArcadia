@@ -3,3 +3,10 @@
   display: flex;
   flex-wrap: wrap;
 }
+
+.PetsListSmall
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

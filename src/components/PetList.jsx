@@ -2,11 +2,16 @@
 
 import ViewPetCard from "./ViewPetCard"
 
+//import { useTheme } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
+
 import "./PetList.css"
 
 export default function PetList({pets}) {
+  const isSmallScreen = useMediaQuery('(max-width:915px)'); {/*Media query used to make page responsive*/ }
+
   return (
-    <div className="PetsList">
+    <div className={isSmallScreen ? "PetsListSmall" : "PetsList"}>
       {
         pets.map((pet) => {
           return(

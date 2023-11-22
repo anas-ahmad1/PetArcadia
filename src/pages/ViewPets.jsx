@@ -9,6 +9,8 @@ import PetList from '../components/PetList';
 import AddPet from '../components/AddPet';
 import SideBar from '../components/SideBar';
 
+import { useMediaQuery } from "@mui/material";
+
 import "./ViewPets.css"
 
 function initialisePetsList()
@@ -31,18 +33,20 @@ export default function ViewPets() {
   const [open, setOpen] = useState(false);
   const toggleOpen = () => setOpen(!open);
 
+  const isMediumScreen = useMediaQuery('(max-width:900px)'); {/*Media query used to make page responsive*/ }
+
   return (
     <main className='Wrapper'>
-      <Grid container spacing={15} pt={5} >
+      <Grid container pt={5} >
 
-        <Grid item xs={4}>
+        <Grid item xs={isMediumScreen ? 0 : 4}>
         </Grid>
 
-        <Grid item xs={4} sx={{textAlign: "center"}}>
+        <Grid item xs={isMediumScreen ? 12 : 4} sx={{textAlign: "center"}}>
           <b className='Heading'>YOUR PETS</b>
         </Grid>
 
-        <Grid item xs={4} sx={{textAlign: "center"}}>
+        <Grid item xs={isMediumScreen ? 12 : 4} sx={{textAlign: "center"}}>
           <Button variant='contained' color="primary" size="large" style={{ fontSize: "1.5rem", borderRadius: "10px"}}
             startIcon={<AddCircleOutlineIcon style={{fontSize: "2rem", color: 'white' }} />}
             onClick={toggleOpen}
@@ -64,11 +68,10 @@ export default function ViewPets() {
       </Grid>
 
 
-
       <Modal
         open={open}
         onClose={toggleOpen}
-        style={{alignItems:'center', justifyContent:'center'}}
+        style={{alignItems:'center', justifyContent:'center', overflow:'auto'}}
       >
         <AddPet onAddPet={handleAddPet} toggleModal={toggleOpen}/>
       </Modal>
