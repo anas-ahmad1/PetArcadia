@@ -37,7 +37,7 @@ const style = {
 };
 
 
-export default function AddPet({onAddPet, toggleModal})
+export default function AddPet({toggleModal})
 {
 
   const {register, handleSubmit} = useForm({mode: "onChange" });
@@ -82,7 +82,7 @@ export default function AddPet({onAddPet, toggleModal})
   };
 
 
-  const dispatch = useDispatch;
+  const dispatch = useDispatch();
 
   const onFormSubmit = async (data) => {
     data.image = selectedImage;
@@ -106,7 +106,7 @@ export default function AddPet({onAddPet, toggleModal})
       console.log(error)
     })
 
-    onAddPet(data);
+    //onAddPet(data);
 
     //closing Modal
     toggleModal();

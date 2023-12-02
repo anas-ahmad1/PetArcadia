@@ -6,11 +6,18 @@ const petSlice = createSlice({
       pets: []
     },
     reducers: {
+      getPetsFromMongoResponse : (state, action) => {
+        //populating array of pets with response
+        state.pets = action.payload.map(pet => {
+          //creating and returning a pet object to push onto redux pets array
+          return {id: pet._id, name: pet.name, species: pet.species, breed: pet.breed, gender: pet.gender, age: pet.age, weight: pet.weight, vaccinated: pet.vaccinated}
+        })
+      },
       addPet : (state, action) => {
         state.pets.push(action.payload)
       },
     }
 });
 
-export const {addPet} = petSlice.actions;
+export const {getPetsFromMongoResponse, addPet} = petSlice.actions;
 export default petSlice.reducer;

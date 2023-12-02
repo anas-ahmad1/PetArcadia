@@ -15,6 +15,12 @@ mongoose.connect('mongodb://127.0.0.1:27017/petArcadia');
 
 //Routes here:
 
+app.get('/pets', async (req, res) => {
+  PetModel.find()
+  .then(pets => res.json(pets))
+  .catch(err => res.json(err))
+})
+
 app.post('/addpet', async (req, res) => {
   const name = req.body.name;
   const species = req.body.species;

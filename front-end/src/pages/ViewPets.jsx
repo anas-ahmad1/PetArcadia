@@ -11,29 +11,45 @@ import SideBar from '../components/SideBar';
 
 import { useMediaQuery } from "@mui/material";
 
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+
+import { getPetsFromMongoResponse } from '../redux/petSlice'
+
 import "./ViewPets.css"
 
-function initialisePetsList()
-{
-  const myPets = [
-    { id: 1, name: 'Matcha', species: 'Cat', breed: "Calico", gender: "Male", age: 1, weight: 5, vaccinated: "Partial"},
-    { id: 2, name: 'Cleo', species: 'Dog', breed: "Golden Retriever", gender: "Male", age: 1, weight: 5, vaccinated: "Complete" },
-  ];
-  return myPets;
-}
+
 
 export default function ViewPets() {
-  const [pets, setPets] = useState(initialisePetsList);
-
-  const handleAddPet = (newPet) => {
-    const newPetList = [...pets, newPet];
-    setPets(newPetList);
-  };
 
   const [open, setOpen] = useState(false);
   const toggleOpen = () => setOpen(!open);
 
   const isMediumScreen = useMediaQuery('(max-width:900px)'); {/*Media query used to make page responsive*/ }
+
+  const dispatch = useDispatch()
+
+  useEffect(()=> {
+    const fetchData = async() => {
+        try
+        {
+          //this is fetching all pets (of a user) from DB
+          const response = await axios.get('http://localhost:3001/pets');
+
+          //sending the response (all pets) to REDUX
+          dispatch(getPetsFromMongoResponse(response.data));
+        }
+        catch(err)
+        {
+          console.log(err)
+        }
+    }
+    fetchData();
+  })
+
+  //getting list of pets from REDUX
+  const pets = useSelector(state => state.pets.pets);
 
   return (
     <main className='Wrapper'>
@@ -75,7 +91,7 @@ export default function ViewPets() {
         onClose={toggleOpen}
         style={{alignItems:'center', justifyContent:'center', overflow:'auto'}}
       >
-        <AddPet onAddPet={handleAddPet} toggleModal={toggleOpen}/>
+        <AddPet toggleModal={toggleOpen}/>
       </Modal>
 
     </main>
