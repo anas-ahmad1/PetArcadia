@@ -85,6 +85,7 @@ export default function AddPet({toggleModal})
   const dispatch = useDispatch();
 
   const onFormSubmit = async (data) => {
+
     data.image = selectedImage;
 
     const name = data.name;

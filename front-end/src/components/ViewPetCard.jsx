@@ -7,11 +7,14 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import Link from '@mui/material/Link';
 import Tooltip from '@mui/material/Tooltip';
 import Box from '@mui/material/Box';
 
 import Matcha from "../assets/myCat.jpg"
+
+//NOTE THAT WE NEED THIS LINK FOR ROUTING
+//MUI LINK COMPONENT WILL NOT WORK
+import { Link } from "react-router-dom";
 
 import "./ViewPetCard.css"
 
@@ -47,7 +50,8 @@ export default function PetCard({pet})
         </Grid>
         <Grid item xs={2}>
           <Tooltip title="Edit">
-            <Button size="large" as={Link} to="/">
+            {/* To edit profile page: */}
+            <Button size="large" as={Link} to={`/pets/${pet.id}`}>
               <EditIcon />
             </Button>
           </Tooltip>

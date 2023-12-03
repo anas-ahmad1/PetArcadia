@@ -15,6 +15,21 @@ mongoose.connect('mongodb://127.0.0.1:27017/petArcadia');
 
 //Routes here:
 
+app.put('/pets/:id', async (req, res) => {
+  const id = req.params.id;
+
+  console.log("Updating Pet!");
+
+  PetModel.findByIdAndUpdate({_id: id}, {
+    name: req.body.name,
+    age: req.body.age,
+    weight: req.body.weight,
+    vaccinated: req.body.vaccinated
+  }).then(pet => res.json(pet))
+  .catch(err => res.json(err))
+})
+
+
 app.get('/pets', async (req, res) => {
   PetModel.find()
   .then(pets => res.json(pets))

@@ -16,8 +16,18 @@ const petSlice = createSlice({
       addPet : (state, action) => {
         state.pets.push(action.payload)
       },
+      updatePet: (state, action) => {
+        const index = state.pets.findIndex(pet => pet.id === action.payload.id)
+        state.pets[index] = {
+          id: action.payload.id,
+          name: action.payload.name,
+          age: action.payload.age,
+          weight: action.payload.weight,
+          vaccinated: action.payload.vaccinated
+        }
+    },
     }
 });
 
-export const {getPetsFromMongoResponse, addPet} = petSlice.actions;
+export const {getPetsFromMongoResponse, addPet, updatePet} = petSlice.actions;
 export default petSlice.reducer;
