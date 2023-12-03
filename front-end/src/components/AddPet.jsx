@@ -96,7 +96,7 @@ export default function AddPet({toggleModal})
     const weight = data.weight;
     const vaccinated = data.vaccinated;
 
-    axios.post("http://localhost:3001/addpet", {name, species, breed, gender, age, weight, vaccinated})
+    axios.post("http://localhost:3000/addpet", {name, species, breed, gender, age, weight, vaccinated})
     .then((res) => {
       dispatch(addPet(res.data))
       //first we sent a post request to our backend server

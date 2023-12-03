@@ -35,7 +35,7 @@ export default function ViewPets() {
         try
         {
           //this is fetching all pets (of a user) from DB
-          const response = await axios.get('http://localhost:3001/pets');
+          const response = await axios.get('http://localhost:3000/pets');
 
           //sending the response (all pets) to REDUX
           dispatch(getPetsFromMongoResponse(response.data));

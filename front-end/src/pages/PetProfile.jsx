@@ -108,7 +108,7 @@ export default function PetProfile() {
     const weight = formdata.weight;
     const vaccinated = formdata.vaccinated;
 
-    axios.put('http://localhost:3001/pets/'+id, {name, age, weight, vaccinated})
+    axios.put('http://localhost:3000/pets/'+id, {name, age, weight, vaccinated})
     .then(res => {
       dispatch(updatePet({id, name, age, weight, vaccinated}))
       navigate('/pets')
