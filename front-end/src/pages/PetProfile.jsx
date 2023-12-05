@@ -26,7 +26,6 @@ import Radio from "@mui/material/Radio";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from 'axios';
 
 import { updatePet } from '../redux/petSlice'
 
@@ -42,11 +41,25 @@ const getStyles = () => {
 export default function PetProfile() {
   const theme = useTheme();
 
-  const initialiseStatic = {species: "", breed: "", gender: ""};
+  //getting id from url parameters
+  const {id} = useParams();
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const initialiseStatic = {species: "", breed: "", gender: "", image: ""};
   //contains those properties of a pet that cannot be changed
   const [staticProperties, setStaticProperties] = useState(initialiseStatic);
 
-  const {register, handleSubmit} = useForm({mode: "onChange"});
+  const {pets} = useSelector(state => state.pets);
+
+  const defaultPetFields = pets.find((u) => u._id === id) || { name: "", age: 0, weight: 0, vaccinated: "Unvaccinated" };
+
+  const {register, handleSubmit, setValue} = useForm({mode: "onChange", defaultValues: defaultPetFields});
+
+  //this is needed to check if a new image was uploaded
+  //it needs to be a state so we can trigger a rerender
+  const [imageCheck, setImageCheck] = useState(null);
 
   const registerOptions = {
     name: {},
@@ -71,49 +84,53 @@ export default function PetProfile() {
       }
     },
     vaccinated: {},
-    //image: {}
+    image: {}
   }
 
-
-  //getting id from url parameters
-  const {id} = useParams()
-
-  const pets = useSelector(state => state.pets.pets)
 
   useEffect(()=> {
     const pet = pets.find(u => u.id === id)
 
-    if (pet) {
-      const fields = ['name', 'age', 'weight', 'vaccinated'];
+    if (id && pets.length > 0) {
+      const fields = ['name', 'age', 'weight', 'vaccinated', 'image'];
 
       for(let field of fields)
       {
-        registerOptions[field] = pet[field];
+        setValue(field, pet[field]);
       }
 
       //setting Static Properties
-      const newStatic = {...pet};
-      setStaticProperties(newStatic);
+      setStaticProperties(pet);
     }
 
-  }, []);
+  }, [pets, id, setValue, setStaticProperties]);
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const handleUpdate = async (formdata) => {
+  const handleImageChange = (e) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(e.target.files[0]);
+
+    reader.onload = () => {
+      const newImage = reader.result;
+      setValue("image", newImage);
+      setImageCheck(newImage);
+    };
+    reader.onerror = (error) => {
+      console.log("Error: ", error);
+    };
+  };
+
+  const handleUpdate = (formdata) => {
 
     const name = formdata.name;
     const age = formdata.age;
     const weight = formdata.weight;
     const vaccinated = formdata.vaccinated;
 
-    axios.put('http://localhost:3000/pets/'+id, {name, age, weight, vaccinated})
-    .then(res => {
-      dispatch(updatePet({id, name, age, weight, vaccinated}))
-      navigate('/pets')
-    })
-    .catch(err => console.log(err))
+    var image = formdata.image;
+
+    dispatch(updatePet({id, name, age, weight, vaccinated, image}));
+    navigate('/pets')
   }
 
 
@@ -178,12 +195,15 @@ export default function PetProfile() {
                           style={{ display: "none" }}
                           id="contained-button-file"
                           type="file"
+                          ref={register}
+                          {...register("image", registerOptions.image)}
+                          onChange={handleImageChange}
                         />
                         <label htmlFor="contained-button-file">
                           <IconButton component="span">
                             <Avatar
                               src={
-                                "https://www.vetstreet.com/wp-content/uploads/2022/09/view-pet-portrait-cat-mammal-close-843475-pxhere.com-1.jpg"
+                                imageCheck ? imageCheck : staticProperties.image
                               }
                               style={{
                                 width: "250px",
@@ -368,7 +388,8 @@ export default function PetProfile() {
                             >
                               <FormControlLabel value="Complete" control={<Radio />} {...register("vaccinated", registerOptions.vaccinated)} label="Complete" />
                               <FormControlLabel value="Partial" control={<Radio />} {...register("vaccinated", registerOptions.vaccinated)} label="Partial" />
-                              <FormControlLabel value="Unvaccinated" control={<Radio />} {...register("vaccinated", registerOptions.vaccinated)} label="Unvaccinated" />
+                              {/* Default is unvaccinated: */}
+                              <FormControlLabel control={<Radio />} {...register("vaccinated", registerOptions.vaccinated)} label="Unvaccinated" />
                             </RadioGroup>
                           </FormControl>
 

@@ -16,40 +16,50 @@ mongoose.connect('mongodb://127.0.0.1:27017/petArcadia');
 
 //Routes here:
 
+app.post('/pets/new', async (req, res) => {
+  try
+  {
+    console.log("Adding Pet!");
+
+    const {name, species, breed, gender, age, weight, vaccinated, image} = req.body;
+
+    const pet = new PetModel({name, species, breed, gender, age, weight, vaccinated, image});
+    const result = await pet.save();
+
+    res.status(201).json(result);
+  }
+  catch (error)
+  {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 app.put('/pets/:id', async (req, res) => {
-  const id = req.params.id;
-
-  console.log("Updating Pet!");
-
-  PetModel.findByIdAndUpdate({_id: id}, {
-    name: req.body.name,
-    age: req.body.age,
-    weight: req.body.weight,
-    vaccinated: req.body.vaccinated
-  }).then(pet => res.json(pet))
-  .catch(err => res.json(err))
+  try {
+    const { id } = req.params;
+    const { name, age, weight, vaccinated, image } = req.body;
+    const result = await PetModel.findByIdAndUpdate(
+      id,
+      {
+        name, age, weight, vaccinated, image
+      },
+      {
+        runValidators: true,
+      }
+    );
+    res.json(result);
+  }
+  catch (error)
+  {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 })
-
 
 app.get('/pets', async (req, res) => {
   PetModel.find()
   .then(pets => res.json(pets))
   .catch(err => res.json(err))
 })
-
-app.post('/addpet', async (req, res) => {
-  const name = req.body.name;
-  const species = req.body.species;
-  const breed = req.body.breed;
-  const gender = req.body.gender;
-  const age = req.body.age;
-  const weight = req.body.weight;
-  const vaccinated = req.body.vaccinated;
-
-  PetModel.create({name, species, breed, gender, age, weight, vaccinated})
-  .then(pet => res.json(pet))
-  .catch(error => res.json(error))
-});
 
 app.get('/getblogs', async (req, res) => {
   blogModel.find()

@@ -33,8 +33,11 @@ const petSchema = new mongoose.Schema({
     type: String,
     required: [true, "Vaccination Status is must"],
     enum: ['Complete', 'Partial', 'Unvaccinated']
+  },
+  image: {
+    type: String,
+    required: [true, "Image is must"],
   }
-  //add avatar here
 });
 
 const PetModel = mongoose.model("Pet", petSchema)

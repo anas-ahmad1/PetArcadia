@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
-
-import {useForm} from "react-hook-form";
 import { useState } from "react";
+import {useForm} from "react-hook-form";
 
 import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -14,8 +13,6 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-
-import axios from "axios";
 
 import { addPet } from "../redux/petSlice";
 import { useDispatch } from "react-redux";
@@ -40,7 +37,7 @@ const style = {
 export default function AddPet({toggleModal})
 {
 
-  const {register, handleSubmit} = useForm({mode: "onChange" });
+  const {register, handleSubmit, setValue} = useForm({mode: "onChange" });
 
   const registerOptions = {
     name: {required: "Name cannot be blank"},
@@ -73,20 +70,31 @@ export default function AddPet({toggleModal})
     image: {required: "Upload"}
   }
 
-  //a separate piece of state to handle image uploads
-  const [selectedImage, setSelectedImage] = useState(null);
+  //this is needed to check if a new image was uploaded
+  //it needs to be a state so we can trigger a rerender
+  const [imageCheck, setImageCheck] = useState(null);
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setSelectedImage(URL.createObjectURL(file));
-  };
+    const reader = new FileReader();
+    reader.readAsDataURL(e.target.files[0]);
 
+    reader.onload = () => {
+      const newImage = reader.result;
+
+      //setting value of image field in register
+      setValue("image", newImage); // base64encoded string
+
+      //rerendering
+      setImageCheck(newImage);
+    };
+    reader.onerror = (error) => {
+      console.log("Error: ", error);
+    };
+  };
 
   const dispatch = useDispatch();
 
   const onFormSubmit = async (data) => {
-
-    data.image = selectedImage;
 
     const name = data.name;
     const species = data.species;
@@ -95,19 +103,9 @@ export default function AddPet({toggleModal})
     const age = data.age;
     const weight = data.weight;
     const vaccinated = data.vaccinated;
+    const image = data.image;
 
-    axios.post("http://localhost:3000/addpet", {name, species, breed, gender, age, weight, vaccinated})
-    .then((res) => {
-      dispatch(addPet(res.data))
-      //first we sent a post request to our backend server
-      //the server responds with res.data (contains the pet object in JSON)
-    })
-    .catch((error) => {
-      console.log("Error!");
-      console.log(error)
-    })
-
-    //onAddPet(data);
+    dispatch(addPet({name, species, breed, age, gender, weight, vaccinated, image}));
 
     //closing Modal
     toggleModal();
@@ -179,8 +177,8 @@ export default function AddPet({toggleModal})
               </Button>
           </label>
 
-          <p>{selectedImage &&
-            <img src={selectedImage} height={100} width={100} />}
+          <p>{imageCheck &&
+            <img src={imageCheck} height={100} width={100} />}
           </p>
 
           <FormLabel sx={{mb: 0}} id="gender">Gender:</FormLabel>
