@@ -6,11 +6,16 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { Button } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
 import Tooltip from '@mui/material/Tooltip';
 import Box from '@mui/material/Box';
 
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 import Matcha from "../assets/myCat.jpg"
+
+import { useDispatch } from "react-redux";
+import { deletePet } from "../redux/petSlice";
 
 //NOTE THAT WE NEED THIS LINK FOR ROUTING
 //MUI LINK COMPONENT WILL NOT WORK
@@ -20,12 +25,18 @@ import "./ViewPetCard.css"
 
 export default function PetCard({pet})
 {
+  const dispatch = useDispatch();
 
   return (
     <Card sx={{alignSelf:'center', width:300, marginTop: 10, marginX: 5, paddingX: 2, borderRadius: 5, boxShadow:'0 4px 4px 0 rgba(0,0,0,0.4)'}}>
 
       <Grid container>
         <Grid item xs={2}>
+          <Tooltip title="Delete">
+            <Button size="large" onClick={() => dispatch(deletePet(pet.id))}>
+              <DeleteIcon />
+            </Button>
+          </Tooltip>
         </Grid>
         <Grid item xs={8}>
           <Box
@@ -50,7 +61,6 @@ export default function PetCard({pet})
         </Grid>
         <Grid item xs={2}>
           <Tooltip title="Edit">
-            {/* To edit profile page: */}
             <Button size="large" as={Link} to={`/pets/${pet.id}`}>
               <EditIcon />
             </Button>

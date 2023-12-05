@@ -35,8 +35,7 @@ const petSchema = new mongoose.Schema({
     enum: ['Complete', 'Partial', 'Unvaccinated']
   },
   image: {
-    type: String,
-    required: [true, "Image is must"],
+    type: String
   }
 });
 

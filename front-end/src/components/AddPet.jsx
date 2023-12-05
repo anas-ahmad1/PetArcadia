@@ -67,7 +67,7 @@ export default function AddPet({toggleModal})
       }
     },
     vaccinated: {required: "Select one Status"},
-    image: {required: "Upload"}
+    image: {}
   }
 
   //this is needed to check if a new image was uploaded
@@ -95,6 +95,8 @@ export default function AddPet({toggleModal})
   const dispatch = useDispatch();
 
   const onFormSubmit = async (data) => {
+
+    console.log("submitting");
 
     const name = data.name;
     const species = data.species;

@@ -32,6 +32,22 @@ export const updatePet = createAsyncThunk(
   }
 );
 
+// delete action
+export const deletePet = createAsyncThunk(
+  "deletePet",
+  async (id, { rejectWithValue }) => {
+    try
+    {
+      const result = await axios.delete(`http://localhost:3000/pets/${id}/delete`);
+      return result.data;
+    }
+    catch (error)
+    {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 const petSlice = createSlice({
     name: "pets",
     initialState: {

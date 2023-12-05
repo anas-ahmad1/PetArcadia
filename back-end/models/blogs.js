@@ -13,9 +13,6 @@ const blogSchema = new mongoose.Schema({
         type: String,
         required: [true, "Description is Must"]
     }
-
-    //Avatar will be added later
-
 });
 const blogModel = mongoose.model("Blog", blogSchema)
 
