@@ -89,7 +89,7 @@ export default function ViewPets() {
       <Modal
         open={open}
         onClose={toggleOpen}
-        style={{alignItems:'center', justifyContent:'center', overflow:'auto'}}
+        style={{alignItems:'center', justifyContent:'center'}}
       >
         <AddPet toggleModal={toggleOpen}/>
       </Modal>

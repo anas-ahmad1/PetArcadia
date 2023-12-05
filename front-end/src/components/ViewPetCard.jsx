@@ -27,13 +27,22 @@ export default function PetCard({pet})
 {
   const dispatch = useDispatch();
 
+  const confirmDelete = () => {
+    let answer = window.confirm(`Do you want to delete ${pet.name} forever?`);
+
+    if(answer)
+    {
+      dispatch(deletePet(pet.id));
+    }
+  }
+
   return (
     <Card sx={{alignSelf:'center', width:300, marginTop: 10, marginX: 5, paddingX: 2, borderRadius: 5, boxShadow:'0 4px 4px 0 rgba(0,0,0,0.4)'}}>
 
       <Grid container>
         <Grid item xs={2}>
           <Tooltip title="Delete">
-            <Button size="large" onClick={() => dispatch(deletePet(pet.id))}>
+            <Button size="large" onClick={confirmDelete}>
               <DeleteIcon />
             </Button>
           </Tooltip>

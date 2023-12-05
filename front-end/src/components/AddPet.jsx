@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import {useForm} from "react-hook-form";
 
 import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -16,6 +15,9 @@ import MenuItem from "@mui/material/MenuItem";
 
 import { addPet } from "../redux/petSlice";
 import { useDispatch } from "react-redux";
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const style = {
   position: 'absolute',
@@ -37,42 +39,23 @@ const style = {
 export default function AddPet({toggleModal})
 {
 
-  const {register, handleSubmit, setValue} = useForm({mode: "onChange" });
+  const [formData, setFormData] = useState({
+    name: '',
+    species: '',
+    breed: '',
+    gender: '',
+    age: 0,
+    weight: 0,
+    vaccinated: '',
+    image: null,
+  });
 
-  const registerOptions = {
-    name: {required: "Name cannot be blank"},
-    species: {required: "Select one species"},
-    breed: {},
-    gender: {required: "Select one Gender"},
-    age: {
-      required: "Age is required",
-      min: {
-        value: 0,
-        message: "Age must be atleast 0",
-      },
-      max: {
-        value: 100,
-        message: "Age must be less than 100",
-      }
-    },
-    weight: {
-      required: "Weight is required",
-      min: {
-        value: 0,
-        message: "Weight must be atleast 0",
-      },
-      max: {
-        value: 300,
-        message: "Weight must be less than 300",
-      }
-    },
-    vaccinated: {required: "Select one Status"},
-    image: {}
-  }
-
-  //this is needed to check if a new image was uploaded
-  //it needs to be a state so we can trigger a rerender
   const [imageCheck, setImageCheck] = useState(null);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleImageChange = (e) => {
     const reader = new FileReader();
@@ -80,38 +63,116 @@ export default function AddPet({toggleModal})
 
     reader.onload = () => {
       const newImage = reader.result;
-
-      //setting value of image field in register
-      setValue("image", newImage); // base64encoded string
-
-      //rerendering
+      setFormData({ ...formData, image: newImage });
       setImageCheck(newImage);
     };
+
     reader.onerror = (error) => {
-      console.log("Error: ", error);
+      console.log('Error: ', error);
     };
+  };
+
+  const errorMessages =
+  {
+    name: "Name cannot be blank",
+    species: "Select one species",
+    breed: "",
+    gender: "Select one Gender",
+    age: "Age must be between 0 and 100",
+    weight: "Weight must be between 0 and 300",
+    vaccinated: "Select one vaccination status",
+    image: "Image is required"
+  }
+
+  const errorChecking = () =>
+  {
+    if (formData.name === "") {
+      notify(errorMessages.name);
+      return false;
+    }
+    else
+    {
+      if (formData.species === "")
+      {
+        notify(errorMessages.species);
+        return false;
+      }
+      else
+      {
+        if ((formData.gender !== "Male") && (formData.gender !== "Female"))
+        {
+          notify(errorMessages.gender);
+          return false;
+        }
+        else
+        {
+          if (formData.age < 0)
+          {
+            notify(errorMessages.age);
+            return false;
+          }
+          else
+          {
+            if (formData.weight < 0)
+            {
+              notify(errorMessages.weight);
+              return false;
+            }
+            else
+            {
+              if (formData.vaccinated === "")
+              {
+                notify(errorMessages.vaccinated);
+                return false;
+              }
+              else
+              {
+                if ((formData.image === "") || (formData.image === null))
+                {
+                  notify(errorMessages.image);
+                  return false;
+                }
+                else
+                {
+                  return true;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  const notify = (errorMsg) => {
+    toast.error(errorMsg, {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: 'light',
+    });
   };
 
   const dispatch = useDispatch();
 
-  const onFormSubmit = async (data) => {
+  const onFormSubmit = async (e) => {
+    e.preventDefault();
 
-    console.log("submitting");
+    if (errorChecking()) {
+      dispatch(addPet(formData));
 
-    const name = data.name;
-    const species = data.species;
-    const breed = data.breed;
-    const gender = data.gender;
-    const age = data.age;
-    const weight = data.weight;
-    const vaccinated = data.vaccinated;
-    const image = data.image;
-
-    dispatch(addPet({name, species, breed, age, gender, weight, vaccinated, image}));
-
-    //closing Modal
-    toggleModal();
-  }
+      //closing Modal
+      toggleModal();
+    }
+    else
+    {
+      console.log('error');
+    }
+  };
 
   return (
     <>
@@ -120,7 +181,7 @@ export default function AddPet({toggleModal})
         <Box
           component="form"
           //handleSubmit validates inputs prior to submission of Form
-          onSubmit={handleSubmit(onFormSubmit)}
+          onSubmit={onFormSubmit}
           sx={{
             '& > :not(style)': { m: 1, width: '50ch' },
             p: 3,
@@ -131,7 +192,7 @@ export default function AddPet({toggleModal})
         >
 
           <TextField id="outlined-basic" label="Pet Name" variant="outlined"
-            name="name" {...register("name", registerOptions.name)}/>
+            name="name" onChange={handleInputChange} value={formData.name}/>
 
           <br />
           <FormControl fullWidth>
@@ -139,8 +200,10 @@ export default function AddPet({toggleModal})
             <Select
               labelId="species-label"
               id="species"
+              name="species"
               label="Species:"
-              {...register("species", registerOptions.species)}
+              onChange={handleInputChange}
+              value={formData.species}
             >
               <MenuItem value={"Cat"}>Cat</MenuItem>
               <MenuItem value={"Dog"}>Dog</MenuItem>
@@ -155,7 +218,7 @@ export default function AddPet({toggleModal})
           <br />
 
           <TextField id="outlined-basic" label="Breed" variant="outlined"
-            name="breed" {...register("breed", registerOptions.breed)}
+            name="breed" onChange={handleInputChange} value={formData.breed}
           />
           <br />
           <br />
@@ -165,8 +228,6 @@ export default function AddPet({toggleModal})
               style={{ display: 'none' }}
               id="image-upload"
               type="file"
-              ref={register}
-              {...register("image", registerOptions.image)}
               onChange={handleImageChange}
           />
           <label htmlFor="image-upload">
@@ -183,24 +244,28 @@ export default function AddPet({toggleModal})
             <img src={imageCheck} height={100} width={100} />}
           </p>
 
+
           <FormLabel sx={{mb: 0}} id="gender">Gender:</FormLabel>
           <RadioGroup
             row
+            id="gender"
             aria-labelledby="gender"
             name="gender"
             sx={{display: "flex", justifyContent: "center"}}
+            value={formData.gender}
+            onChange={handleInputChange}
           >
-            <FormControlLabel value="Male" control={<Radio />} {...register("gender", registerOptions.gender)} label="Male" />
-            <FormControlLabel value="Female" control={<Radio />} {...register("gender", registerOptions.gender)} label="Female" />
+            <FormControlLabel value="Male" control={<Radio />} label="Male" />
+            <FormControlLabel value="Female" control={<Radio />} label="Female" />
           </RadioGroup>
 
-          <TextField id="outlined-basic" label="Age" variant="outlined"
-            name="age" {...register("age", registerOptions.age)}
+          <TextField defaultValue={0} type="number" id="outlined-basic" label="Age" variant="outlined"
+            name="age" onChange={handleInputChange} value={formData.age}
           />
           <br />
 
-          <TextField id="outlined-basic" label="Weight (kg)" variant="outlined"
-            name="weight" {...register("weight", registerOptions.weight)}
+          <TextField defaultValue={0} type="number" id="outlined-basic" label="Weight (kg)" variant="outlined"
+            name="weight" onChange={handleInputChange} value={formData.weight}
           />
           <br />
           <br />
@@ -211,14 +276,17 @@ export default function AddPet({toggleModal})
             aria-labelledby="vaccination-status"
             name="vaccinated"
             sx={{display: "flex", justifyContent: "center"}}
+            value={formData.vaccinated}
+            onChange={handleInputChange}
           >
-            <FormControlLabel value="Complete" control={<Radio />} {...register("vaccinated", registerOptions.vaccinated)} label="Complete" />
-            <FormControlLabel value="Partial" control={<Radio />} {...register("vaccinated", registerOptions.vaccinated)} label="Partial" />
-            <FormControlLabel value="Unvaccinated" control={<Radio />} {...register("vaccinated", registerOptions.vaccinated)} label="Unvaccinated" />
+            <FormControlLabel value="Complete" control={<Radio />} label="Complete" />
+            <FormControlLabel value="Partial" control={<Radio />} label="Partial" />
+            <FormControlLabel value="Unvaccinated" control={<Radio />} label="Unvaccinated" />
           </RadioGroup>
 
           <Button type="submit" variant="contained"><b style={{color:"white"}}>Add</b></Button>
         </Box>
+        <ToastContainer />
       </Box>
     </>
   )
