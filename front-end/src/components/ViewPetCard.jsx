@@ -32,7 +32,7 @@ export default function PetCard({pet})
 
     if(answer)
     {
-      dispatch(deletePet(pet.id));
+      dispatch(deletePet(pet._id));
     }
   }
 
@@ -70,7 +70,7 @@ export default function PetCard({pet})
         </Grid>
         <Grid item xs={2}>
           <Tooltip title="Edit">
-            <Button size="large" as={Link} to={`/pets/${pet.id}`}>
+            <Button size="large" as={Link} to={`/pets/${pet._id}`}>
               <EditIcon />
             </Button>
           </Tooltip>

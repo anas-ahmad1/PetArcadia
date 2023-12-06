@@ -1,55 +1,41 @@
-import { useState } from 'react';
-
 import { Button } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import Grid from '@mui/material/Grid';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { useMediaQuery } from "@mui/material";
+
+import "./ViewPets.css"
 
 import PetList from '../components/PetList';
 import AddPet from '../components/AddPet';
 import SideBar from '../components/SideBar';
 
-import { useMediaQuery } from "@mui/material";
-
+import { useState } from 'react';
 import { useEffect } from 'react';
+
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
-
-import { getPetsFromMongoResponse } from '../redux/petSlice'
-
-import "./ViewPets.css"
-
+import { getPets } from '../redux/petSlice'
 
 
 export default function ViewPets() {
 
+  const dispatch = useDispatch();
+
+  //getPets fetches pets list from DB and populates the store
+  useEffect(() => {
+    dispatch(getPets());
+  }, []);
+
+  //getting list of pets from REDUX store
+  const pets = useSelector(state => state.pets.pets);
+
+
+  //managing modal state:
   const [open, setOpen] = useState(false);
   const toggleOpen = () => setOpen(!open);
 
-  const isMediumScreen = useMediaQuery('(max-width:900px)'); {/*Media query used to make page responsive*/ }
-
-  const dispatch = useDispatch()
-
-  useEffect(()=> {
-    const fetchData = async() => {
-        try
-        {
-          //this is fetching all pets (of a user) from DB
-          const response = await axios.get('http://localhost:3000/pets');
-
-          //sending the response (all pets) to REDUX
-          dispatch(getPetsFromMongoResponse(response.data));
-        }
-        catch(err)
-        {
-          console.log(err)
-        }
-    }
-    fetchData();
-  })
-
-  //getting list of pets from REDUX
-  const pets = useSelector(state => state.pets.pets);
+  /*Media query used to make page responsive*/
+  const isMediumScreen = useMediaQuery('(max-width:900px)');
 
   return (
     <main className='Wrapper'>

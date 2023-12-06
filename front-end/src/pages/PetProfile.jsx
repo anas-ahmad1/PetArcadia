@@ -1,7 +1,3 @@
-//VALUES FROM REDUX NEED TO BE PUT IN INPUT FIELDS
-
-import { useForm } from "react-hook-form";
-
 import {
   Container,
   Box,
@@ -13,22 +9,31 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-
 import FormControl from "@mui/material/FormControl";
-import { useTheme } from "@emotion/react";
-
 import FormLabel from "@mui/material/FormLabel";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
+import InputAdornment from "@mui/material/InputAdornment";
+import PetsIcon from '@mui/icons-material/Pets';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import MonitorWeightIcon from '@mui/icons-material/MonitorWeight';
 
+import { useTheme } from "@emotion/react";
 
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+
+import { useForm } from "react-hook-form";
+
 import { useNavigate, useParams } from "react-router-dom";
 
+import { useDispatch, useSelector } from "react-redux";
 import { updatePet } from '../redux/petSlice'
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+console.log("Render")
 
 const getStyles = () => {
   return {
@@ -51,18 +56,20 @@ export default function PetProfile() {
   //contains those properties of a pet that cannot be changed
   const [staticProperties, setStaticProperties] = useState(initialiseStatic);
 
-  const {pets} = useSelector(state => state.pets);
+  const pets = useSelector(state => state.pets.pets);
 
   const defaultPetFields = pets.find((u) => u._id === id) || { name: "", age: 0, weight: 0, vaccinated: "Unvaccinated" };
 
-  const {register, handleSubmit, setValue} = useForm({mode: "onChange", defaultValues: defaultPetFields});
+  const {register, handleSubmit, formState: { errors }, setValue} = useForm({mode: "onChange", defaultValues: defaultPetFields});
 
   //this is needed to check if a new image was uploaded
   //it needs to be a state so we can trigger a rerender
   const [imageCheck, setImageCheck] = useState(null);
 
   const registerOptions = {
-    name: {},
+    name: {
+      required: "Name cannot be blank"
+    },
     age: {
       min: {
         value: 0,
@@ -83,19 +90,37 @@ export default function PetProfile() {
         message: "Weight must be less than 300",
       }
     },
-    vaccinated: {},
+    vaccinated: {
+      required: true,
+      message: "Select one vaccination status",
+      defaultValue: "Unvaccinated"
+    },
     image: {}
   }
 
+  const notify = (errorMsg) => {
+    toast.error(errorMsg, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
+
 
   useEffect(()=> {
-    const pet = pets.find(u => u.id === id)
+    const pet = pets.find(u => u._id === id);
 
     if (id && pets.length > 0) {
       const fields = ['name', 'age', 'weight', 'vaccinated', 'image'];
 
       for(let field of fields)
       {
+        console.log(pet.name);
         setValue(field, pet[field]);
       }
 
@@ -103,7 +128,7 @@ export default function PetProfile() {
       setStaticProperties(pet);
     }
 
-  }, [pets, id, setValue, setStaticProperties]);
+  }, [pets]);
 
 
   const handleImageChange = (e) => {
@@ -145,6 +170,12 @@ export default function PetProfile() {
         }}
       >
         <form onSubmit={handleSubmit(handleUpdate)}>
+
+          {/* Rendering Error Toasts */}
+          {errors?.name && notify(errors.name.message)}
+          {errors?.age && notify(errors.age.message)}
+          {errors?.weight && notify(errors.weight.message)}
+          {errors?.vaccinated && notify(errors.name.vaccinated)}
 
           <Box
             sx={{
@@ -328,10 +359,17 @@ export default function PetProfile() {
                         <TextField
                           type="text"
                           id="name"
+                          name="name"
                           {...register("name", registerOptions.name)}
                           label="Name"
                           variant="outlined"
-                          defaultValue={staticProperties.species}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <PetsIcon />
+                              </InputAdornment>
+                            ),
+                          }}
                         />
                       </Grid>
                       <Grid
@@ -344,11 +382,19 @@ export default function PetProfile() {
                         }}
                       >
                         <TextField
-                          type="text"
+                          type="number"
                           id="age"
+                          name="age"
                           {...register("age", registerOptions.age)}
                           label="Age"
                           variant="outlined"
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <CalendarMonthIcon />
+                              </InputAdornment>
+                            ),
+                          }}
                         />
                       </Grid>
                       <Grid
@@ -361,11 +407,19 @@ export default function PetProfile() {
                         }}
                       >
                         <TextField
-                          type="text"
+                          type="number"
                           id="weight"
+                          name="weight"
                           {...register("weight", registerOptions.weight)}
                           label="Weight"
                           variant="outlined"
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <MonitorWeightIcon />
+                              </InputAdornment>
+                            ),
+                          }}
                         />
                       </Grid>
                       <Grid
@@ -388,7 +442,6 @@ export default function PetProfile() {
                             >
                               <FormControlLabel value="Complete" control={<Radio />} {...register("vaccinated", registerOptions.vaccinated)} label="Complete" />
                               <FormControlLabel value="Partial" control={<Radio />} {...register("vaccinated", registerOptions.vaccinated)} label="Partial" />
-                              {/* Default is unvaccinated: */}
                               <FormControlLabel control={<Radio />} {...register("vaccinated", registerOptions.vaccinated)} label="Unvaccinated" />
                             </RadioGroup>
                           </FormControl>
@@ -420,6 +473,7 @@ export default function PetProfile() {
               </Box>
             </Paper>
           </Box>
+          <ToastContainer />
         </form>
       </Box>
     </Container>

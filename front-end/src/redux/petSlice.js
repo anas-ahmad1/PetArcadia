@@ -1,12 +1,27 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+export const getPets = createAsyncThunk(
+  "getPets",
+  async (args, { rejectWithValue }) => {
+    try
+    {
+      const result = await axios.get("http://localhost:3000/pets");
+      return result.data;
+    }
+      catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 // create action
 export const addPet = createAsyncThunk(
   "addPet",
   async (data, { rejectWithValue }) => {
     try {
       const result = await axios.post("http://localhost:3000/pets/new", data);
+      console.log("result", result)
       return result.data;
     }
     catch (error) {
@@ -55,24 +70,24 @@ const petSlice = createSlice({
       error: null
     },
     reducers: {
-      getPetsFromMongoResponse : (state, action) => {
-        //populating array of pets with response
-        state.pets = action.payload.map(pet => {
-          //creating and returning a pet object to push onto redux pets array
-          return {id: pet._id, name: pet.name, species: pet.species, breed: pet.breed, gender: pet.gender, age: pet.age, weight: pet.weight, vaccinated: pet.vaccinated, image: pet.image}
-        })
-      }
     },
     extraReducers: (builder) => {
       builder
-        //Add Pet reducers
+        //getPets reducers
+        .addCase(getPets.fulfilled, (state, action) => {
+          state.pets = action.payload;
+        })
+        .addCase(getPets.rejected, (state, action) => {
+          state.error = action.payload;
+        })
+        //addPet reducers
         .addCase(addPet.fulfilled, (state, action) => {
           state.pets.push(action.payload);
         })
         .addCase(addPet.rejected, (state, action) => {
           state.error = action.payload.message;
         })
-        //Update Pet reducers
+        //updatePet reducers
         .addCase(updatePet.fulfilled, (state, action) => {
           state.pets = state.pets.map((pet) => {
             if (pet._id === action.payload._id) {
@@ -83,6 +98,16 @@ const petSlice = createSlice({
         })
         .addCase(updatePet.rejected, (state, action) => {
           state.error = action.payload.message;
+        })
+        //deletePet reducers:
+        .addCase(deletePet.fulfilled, (state, action) => {
+          const { _id } = action.payload;
+          if (_id) {
+            state.pets = state.pets.filter((pet) => pet._id !== _id);
+          }
+        })
+        .addCase(deletePet.rejected, (state, action) => {
+          state.error = action.payload;
         });
     }
 });
