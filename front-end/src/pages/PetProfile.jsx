@@ -28,7 +28,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
-import { updatePet } from '../redux/petSlice'
+import { getPet, updatePet } from '../redux/petSlice'
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -56,7 +56,7 @@ export default function PetProfile() {
   //contains those properties of a pet that cannot be changed
   const [staticProperties, setStaticProperties] = useState(initialiseStatic);
 
-  const pets = useSelector(state => state.pets.pets);
+  const pets = useSelector((state) => state.pets.pets);
 
   const defaultPetFields = pets.find((u) => u._id === id) || { name: "", age: 0, weight: 0, vaccinated: "Unvaccinated" };
 
@@ -113,21 +113,24 @@ export default function PetProfile() {
 
 
   useEffect(()=> {
-    const pet = pets.find(u => u._id === id);
+    if (pets.length > 0)
+    {
+      const pet = pets.find(u => u._id === id);
 
-    if (id && pets.length > 0) {
       const fields = ['name', 'age', 'weight', 'vaccinated', 'image'];
 
       for(let field of fields)
       {
-        console.log(pet.name);
         setValue(field, pet[field]);
       }
 
       //setting Static Properties
       setStaticProperties(pet);
     }
-
+    else
+    {
+      dispatch(getPet(id));
+    }
   }, [pets]);
 
 

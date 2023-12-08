@@ -48,7 +48,7 @@ export default function SideBar() {
   return (
     <div style={{marginLeft: 0}}>
         <React.Fragment>
-          <Button variant='contained' color="primary" size="large" style={{ fontSize: "2rem", borderRadius: "10px"}} onClick={toggleDrawer('left', true)}>
+          <Button variant='contained' color="primary" size="large" style={{ width: "unset", fontSize: "2rem", borderRadius: "10px"}} onClick={toggleDrawer('left', true)}>
             <DoubleArrowOutlinedIcon style={{fontSize: "2rem", color: 'white' }} />
           </Button>
           <SwipeableDrawer

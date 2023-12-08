@@ -15,6 +15,22 @@ export const getPets = createAsyncThunk(
   }
 );
 
+export const getPet = createAsyncThunk(
+  "getPet",
+  async (id, { rejectWithValue }) => {
+    try
+    {
+      console.log("Here");
+      const result = await axios.get(`http://localhost:3000/pets/${id}`);
+      return result.data;
+    }
+      catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+
 // create action
 export const addPet = createAsyncThunk(
   "addPet",
@@ -78,6 +94,13 @@ const petSlice = createSlice({
           state.pets = action.payload;
         })
         .addCase(getPets.rejected, (state, action) => {
+          state.error = action.payload;
+        })
+        //getPet reducers
+        .addCase(getPet.fulfilled, (state, action) => {
+          state.pets.push(action.payload);
+        })
+        .addCase(getPet.rejected, (state, action) => {
           state.error = action.payload;
         })
         //addPet reducers

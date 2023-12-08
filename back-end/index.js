@@ -44,6 +44,19 @@ app.delete("/pets/:id/delete", async (req, res) => {
   }
 });
 
+app.get('/pets/:id', async (req, res) => {
+  try {
+    const {id} = req.params;
+    const result = await PetModel.findById(id);
+    console.log(result);
+    res.json(result);
+  }
+  catch (error)
+  {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 app.put('/pets/:id', async (req, res) => {
   try {
     const { id } = req.params;

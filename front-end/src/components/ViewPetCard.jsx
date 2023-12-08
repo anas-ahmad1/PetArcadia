@@ -23,8 +23,12 @@ import { Link } from "react-router-dom";
 
 import "./ViewPetCard.css"
 
+import { useTheme } from "@emotion/react";
+
 export default function PetCard({pet})
 {
+  const theme = useTheme();
+
   const dispatch = useDispatch();
 
   const confirmDelete = () => {
@@ -42,7 +46,7 @@ export default function PetCard({pet})
       <Grid container>
         <Grid item xs={2}>
           <Tooltip title="Delete">
-            <Button size="large" onClick={confirmDelete}>
+            <Button size="large" onClick={confirmDelete} sx={{ all: "unset"}}>
               <DeleteIcon />
             </Button>
           </Tooltip>
@@ -70,7 +74,7 @@ export default function PetCard({pet})
         </Grid>
         <Grid item xs={2}>
           <Tooltip title="Edit">
-            <Button size="large" as={Link} to={`/pets/${pet._id}`}>
+            <Button size="large" as={Link} to={`/pets/${pet._id}`} sx={{ all: "unset"}}>
               <EditIcon />
             </Button>
           </Tooltip>
